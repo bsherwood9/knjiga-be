@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Books = require("../models/books_model");
+const restricted = require("../auth/restricted");
 
-router.get("/", (req, res) => {
+router.get("/", restricted, (req, res) => {
   Books.findAllBooks()
     .then((posts) => {
       res.json(posts);

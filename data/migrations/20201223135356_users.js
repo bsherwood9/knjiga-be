@@ -3,8 +3,8 @@ exports.up = function (knex) {
     .createTable("users", (tbl) => {
       tbl.increments("id").primary();
       tbl.string("email", 128).notNullable().unique();
+      tbl.string("username", 128).notNullable().unique();
       tbl.string("password", 128).notNullable();
-      tbl.text("role", 64).notNullable();
     })
     .createTable("books", (tbl) => {
       tbl.increments("id").primary();
@@ -18,6 +18,28 @@ exports.up = function (knex) {
       tbl.string("publishDate", 64);
       tbl.specificType("categories", "text ARRAY");
       tbl.string("bookColor", 64).notNullable();
+    })
+    .createTable("club", (tbl) => {
+      tbl.increments("id").primary();
+      tbl.string("admin").notNullable();
+      tbl.string("clubName").notNullable();
+      tbl.string("bookSelection");
+    })
+    .createTable("club_members", (tbl) => {
+      tbl
+        .integer("club_id")
+        .unsigned()
+        .notNullable()
+        .references("club.id")
+        .onUpdate("CASCADE")
+        .onDelete("CASCADE");
+      tbl
+        .integer("user_id")
+        .unsigned()
+        .notNullable()
+        .references("users.id")
+        .onUpdate("CASCADE")
+        .onDelete("CASCADE");
     })
     .createTable("bookshelf", (tbl) => {
       tbl.increments("id").primary();
@@ -55,6 +77,8 @@ exports.down = function (knex) {
   return knex.schema
     .dropTableIfExists("shelf_book_map")
     .dropTableIfExists("bookshelf")
+    .dropTableIfExists("club_members")
+    .dropTableIfExists("club")
     .dropTableIfExists("books")
     .dropTableIfExists("users");
 };
