@@ -14,5 +14,5 @@ function find() {
 }
 
 function findBy(filter) {
-  return db("users").where("username", filter).first().returning("*");
+  return db("users").where("email", filter).first().returning("*");
 }

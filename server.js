@@ -7,15 +7,15 @@ const server = express();
 const BooksRouter = require("./routes/books_router");
 const authRouter = require("./auth/auth-router");
 
-server.use(cors());
 server.use(morgan("combined"));
 server.use(express.json());
-
+server.use(cors());
+server.options("*", cors());
 server.use("/api/auth", authRouter);
 server.use("/api/books", BooksRouter);
 
 // server.use("/api/", userRouter) /
-server.listen(6500, () => console.log("Server Running on 6000"));
+server.listen(5600, () => console.log("Server Running on 5600"));
 server.get("/test", (req, res) => {
   res.status(200);
   res.send("<h1>Server Status</h1><h2>Server running succesfully.</h2>");
