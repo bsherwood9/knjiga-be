@@ -11,14 +11,14 @@ const clubRouter = require("./routes/club_router");
 
 server.use(morgan("combined"));
 server.use(express.json());
-server.use(cors());
+server.use(cors({ origin: true, credentials: true }));
 server.use(cookieParser());
 
 server.use("/api/auth", authRouter);
 server.use("/api/books", BooksRouter);
 server.use("/api/clubs", clubRouter);
 // server.use("/api/", userRouter) /
-server.listen(2500, () => console.log("Server Running on 5600"));
+server.listen(2600, () => console.log("Server Running on 5600"));
 server.get("/test", (req, res) => {
   res.status(200);
   res.send("<h1>Server Status</h1><h2>Server running succesfully.</h2>");
