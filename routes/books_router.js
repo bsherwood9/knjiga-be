@@ -14,7 +14,7 @@ router.get("/", restricted, (req, res) => {
 });
 
 // by post ID
-router.get("/:id", (req, res) => {
+router.get("/:id", restricted, (req, res) => {
   const id = req.params.id;
   Books.findBookById({ id })
     .first()
@@ -26,7 +26,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.post("/addBook", async (req, res) => {
+router.post("/addBook", restricted, async (req, res) => {
   const newBook = req.body;
   //   const checkBook = await Books.findBookByBookId(newBook);
   console.log(newBook.bookId);

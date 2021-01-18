@@ -6,7 +6,7 @@ module.exports = {
   findBy,
 };
 function addUser(newUser) {
-  return db("users").insert(newUser);
+  return db("users").insert(newUser).returning("*");
 }
 
 function find() {

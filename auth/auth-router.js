@@ -13,7 +13,7 @@ router.post("/register", (req, res) => {
   user.password = hash;
   Users.addUser(user)
     .then((data) => {
-      res.status(201).json({ message: "You've registered!", data });
+      res.status(201).json({ message: "You've registered!" });
     })
     .catch((err) =>
       res
@@ -24,7 +24,7 @@ router.post("/register", (req, res) => {
 
 router.post("/login", (req, res) => {
   let { email, password } = req.body;
-  console.log(req.body, email);
+  console.log(req.body);
   //   console.log(Users.findBy(username));
   Users.findBy(email)
     .then((user) => {
@@ -32,9 +32,11 @@ router.post("/login", (req, res) => {
       if (user && bcrypt.compareSync(password, user.password)) {
         //   //creating a token
         const token = generateToken(user);
-        return res.status(200).json({
+        //setting the token in the cookies!
+        res.cookie("token", token);
+        res.cookie("user_id", user.id);
+        res.json({
           message: `Welcome to Knjiga ${user.name}.`,
-          token,
         });
       } else {
         res.status(401).json({ message: "Invalid Credentials" });
