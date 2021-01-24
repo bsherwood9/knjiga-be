@@ -2,8 +2,9 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Users = require("../models/users_model");
+const Shelves = require("../models/shelf_model");
 
-router.post("/register", (req, res) => {
+router.post("/register", async (req, res) => {
   const user = req.body;
   const salt = bcrypt.genSaltSync(10);
   // Hash Password
@@ -11,15 +12,27 @@ router.post("/register", (req, res) => {
   console.log("this is the hash", hash);
   console.log(user);
   user.password = hash;
-  Users.addUser(user)
+  let UserInfo = Users.addUser(user)
     .then((data) => {
       res.status(201).json({ message: "You've registered!" });
+      return data;
     })
     .catch((err) =>
       res
         .status(500)
         .json({ errorMessage: "There was an error registering.", err })
     );
+  let shelfData = {
+    title: "My Books",
+    description: "A shelf for all my books.",
+    user_id: UserInfo.id,
+  };
+  console.log(shelfData);
+  // Shelves.addShelf(shelfData)
+  //   .then((data) => {
+  //     return data;
+  //   })
+  //   .catch((err) => console.log(err));
 });
 
 router.post("/login", (req, res) => {
@@ -30,10 +43,12 @@ router.post("/login", (req, res) => {
     .then((user) => {
       console.log(user);
       if (user && bcrypt.compareSync(password, user.password)) {
-        //   //creating a token
+        //creating a token
         const token = generateToken(user);
         //setting the token in the cookies!
         res.cookie("token", token);
+        //pass options in cookie, that must be https secure=true
+        //expirate
         res.cookie("user_id", user.id);
         res.json({
           message: `Welcome to Knjiga ${user.name}.`,
@@ -53,8 +68,10 @@ function generateToken(user) {
     email: user.email,
   };
   const options = {
-    expiresIn: "7h",
+    expiresIn: "24h",
   };
   return jwt.sign(payload, process.env.MY_SECRET, options);
 }
 module.exports = router;
+
+//if token is expired, auto-delete the cookie using res.clearCookie

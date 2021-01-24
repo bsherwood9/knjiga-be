@@ -51,9 +51,8 @@ exports.up = function (knex) {
         .onUpdate("CASCADE")
         .onDelete("CASCADE");
 
-      tbl.string("title", 128).notNullable().unique();
+      tbl.string("title", 128).notNullable();
       tbl.string("description", 255);
-      tbl.integer("volume_count").notNullable();
     })
     .createTable("shelf_book_map", (tbl) => {
       tbl

@@ -30,9 +30,6 @@ router.post("/addBook", restricted, async (req, res) => {
   const newBook = req.body;
   //   const checkBook = await Books.findBookByBookId(newBook);
   console.log(newBook.bookId);
-  //   if (checkBook) {
-  //     res.status(300).json({ message: "Book is already present" });
-  //   } else {
   Books.add(newBook)
     .then((data) => {
       res.status(208).json({ message: "You successfully added a book.", data });
