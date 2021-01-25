@@ -9,30 +9,14 @@ router.post("/register", async (req, res) => {
   const salt = bcrypt.genSaltSync(10);
   // Hash Password
   const hash = bcrypt.hashSync(user.password, salt);
-  console.log("this is the hash", hash);
-  console.log(user);
   user.password = hash;
-  let UserInfo = Users.addUser(user)
-    .then((data) => {
-      res.status(201).json({ message: "You've registered!" });
-      return data;
-    })
-    .catch((err) =>
-      res
-        .status(500)
-        .json({ errorMessage: "There was an error registering.", err })
-    );
-  let shelfData = {
-    title: "My Books",
-    description: "A shelf for all my books.",
-    user_id: UserInfo.id,
-  };
-  console.log(shelfData);
-  // Shelves.addShelf(shelfData)
-  //   .then((data) => {
-  //     return data;
-  //   })
-  //   .catch((err) => console.log(err));
+  let data = await Register(user);
+  console.log("This is data", data);
+  if (data === "Success") {
+    res.status(200).json({ message: "You successfully registerd" });
+  } else {
+    res.status(500).json({ message: "We couldn't register you." });
+  }
 });
 
 router.post("/login", (req, res) => {
@@ -75,3 +59,33 @@ function generateToken(user) {
 module.exports = router;
 
 //if token is expired, auto-delete the cookie using res.clearCookie
+
+function Register(user) {
+  return Users.addUser(user)
+    .then((userdata) => {
+      let shelfData = {
+        title: "My Books",
+        description: "A shelf for all my books.",
+        user_id: userdata[0].id,
+      };
+      console.log("shelf data", shelfData);
+      return Shelves.addShelf(shelfData);
+    })
+    .then((data) => {
+      if (data) {
+        return "Success";
+      } else {
+        return "Failure";
+      }
+    })
+    .catch((err) => {
+      return "Error";
+    });
+}
+
+const Result = {
+  success: 1,
+  error: 0,
+};
+
+Result.success;
