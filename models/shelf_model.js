@@ -20,8 +20,12 @@ function getShelvesWithData(target) {
     .join("shelf_book_map as s", "s.bookshelf_id", "bs.id")
     .join("books as b", "b.id", "s.book_id")
     .where({ "bs.user_id": target })
-    .select("bs.*", db.raw("array_agg(b.*)as books"))
-    .groupBy("books");
+    .select(
+      "bs.title",
+      "bs.description",
+      db.raw("to_json(ARRAY_AGG(distinct b.*)) as books")
+    )
+    .groupBy("bs.title", "bs.description");
 }
 
 // return db("posts as p")
