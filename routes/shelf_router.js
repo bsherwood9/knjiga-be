@@ -36,4 +36,19 @@ router.get("/", restricted, (req, res) => {
       });
     });
 });
+
+router.get("/alldata", restricted, (req, res) => {
+  let user_id = req.cookies.user_id;
+  console.log(user_id);
+  DB.getShelvesWithData(user_id)
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        message: "There was an error finding your shelves.",
+        err,
+      });
+    });
+});
 module.exports = router;

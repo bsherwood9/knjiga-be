@@ -11,11 +11,11 @@ function add(newBook) {
 }
 
 function findBookById(id) {
-  return db("books").where(id);
+  return db("books").where(id).returning("*");
 }
 
 function findBookByBookId(id) {
-  return db("books").where(bookId, id);
+  return db("books").where("bookId", id).returning("*");
 }
 
 function findAllBooks() {
