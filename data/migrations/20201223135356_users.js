@@ -23,7 +23,12 @@ exports.up = function (knex) {
       tbl.increments("id").primary();
       tbl.string("admin").notNullable();
       tbl.string("clubName").notNullable();
-      tbl.string("bookSelection");
+      tbl
+        .integer("bookSelection")
+        .unsigned()
+        .references("books.id")
+        .onUpdate("CASCADE")
+        .onDelete("CASCADE");
     })
     .createTable("club_members", (tbl) => {
       tbl
