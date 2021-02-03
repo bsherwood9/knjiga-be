@@ -22,7 +22,7 @@ function getClubWithPhoto(target) {
   return db("club as c")
     .join("books as b", "b.id", "c.bookSelection")
     .where("admin", target)
-    .select("c.clubName", "b.image");
+    .select("c.clubName", "b.*");
 }
 
 function editClubBook(id, change) {

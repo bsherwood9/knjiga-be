@@ -12,9 +12,9 @@ router.post("/add", restricted, (req, res) => {
   console.log(clubData);
   DB.addClub(clubData)
     .then((data) => {
-      res
+      return res
         .status(200)
-        .json({ message: "You successfully added a club.", clubs });
+        .json({ message: "You successfully added a club.", data });
     })
     .catch((err) => {
       return res
@@ -52,7 +52,7 @@ router.put("/edit/:id", restricted, async (req, res) => {
     update.bookSelection = res_bookId;
     DB.editClubBook({ id }, update)
       .then((data) => {
-        res
+        return res
           .status(200)
           .json({ message: "You were able to update your club", data });
       })

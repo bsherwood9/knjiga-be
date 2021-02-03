@@ -13,7 +13,7 @@ router.post("/register", async (req, res) => {
   let data = await Register(user);
   console.log("This is data", data);
   if (data === "Success") {
-    res.status(200).json({ message: "You successfully registerd" });
+    res.status(200).json({ message: "You successfully registered" });
   } else {
     res.status(500).json({ message: "We couldn't register you." });
   }
